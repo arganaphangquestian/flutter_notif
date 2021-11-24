@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
-
-import 'notif.dart';
+import 'package:get/get.dart';
+import 'package:notif/controller.dart';
 
 class Home extends StatelessWidget {
+  final controller = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: GestureDetector(
-          onTap: () async {
-            await GlobalFlutterLocalNotificationsPlugin.show(
-                0,
-                'Title Notification',
-                'Lorem ipsum dolor sit amet',
-                platformChannelSpecifics,
-                payload: '{"status": "Notification Success"}');
-          },
-          child: Text("Create Notification"),
-        ),
+      body: GetBuilder<HomeController>(
+        init: controller,
+        builder: (controller) {
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              return Card(
+                child: Padding(
+                  padding: EdgeInsets.all(7),
+                  child: Text('${controller.notifications[index].title}'),
+                ),
+              );
+            },
+            itemCount: controller.notifications.length,
+          );
+        },
       ),
     );
   }
